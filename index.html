@@ -8,13 +8,51 @@
       lang="text/javascript"
       src="https://unpkg.com/@formsort/custom-question-api"
   ></script>
+  <!-- zxcvbn: password strength estimator inspired by password crackers -->
+  <script
+      src="https://cdn.jsdelivr.net/npm/zxcvbn@4.4.2/dist/zxcvbn.js"
+  ></script>
+  <style>
+    #strength-meter {
+      margin-top: 10px;
+      height: 10px;
+      width: 100%;
+      background-color: #e0e0e0;
+    }
+
+    #strength-meter div {
+      height: 100%;
+      width: 0;
+      transition: width 0.5s;
+    }
+  </style>
 </head>
 <body>
 
-<label for="my-input">Password</label><input id="my-input" type="password"/>
+<label for="my-input">Password</label>
+<input id="my-input" type="password"/>
+<div id="strength-meter">
+  <div id="strength-bar"></div>
+</div>
+<p id="strength-text"></p>
 
 <script>
+  <!--  Only allow this page to be seen from formsort flow-->
+  if (window.top !== window.self) {
+    // Page is inside an iframe
+    if (document.referrer !== 'https://onboarding.wearise.com/flow/onboarding/variant/v5?formsortEnv=staging') {
+      // If the referrer is not the authorized domain, redirect or show a message
+      document.body.innerHTML = 'This content can only be viewed from an authorized source.';
+    }
+  }
+  else {
+    // Not inside an iframe, you can redirect or hide content here
+    window.location.href = 'https://wearise.com';
+  }
+
   const inputEl = document.querySelector('#my-input');
+  const strengthMeter = document.getElementById('strength-bar');
+  const strengthText = document.getElementById('strength-text');
 
   // Ensure that the library is loaded before using it
   document.addEventListener("DOMContentLoaded", function () {
@@ -25,6 +63,44 @@
         formsort.setAnswerValue(e.target.value);
       })
     }
+  })
+  // Password strength meter using zxcvbn
+  inputEl.addEventListener('input', function () {
+    const passwordValue = inputEl.value;
+    const result = zxcvbn(passwordValue);
+
+    // Map the score to a percentage for the strength bar
+    const score = result.score;
+    const strengthPercentage = (score + 1) * 20; // Score is 0-4, so we map to 0-100%
+
+    // Update strength bar and text
+    strengthMeter.style.width = `${strengthPercentage}%`;
+
+    let strengthLabel = '';
+    switch (score) {
+      case 0:
+        strengthLabel = 'Very Weak';
+        strengthMeter.style.backgroundColor = '#ff4d4d'; // Red
+        break;
+      case 1:
+        strengthLabel = 'Weak';
+        strengthMeter.style.backgroundColor = '#ffcc00'; // Yellow
+        break;
+      case 2:
+        strengthLabel = 'Fair';
+        strengthMeter.style.backgroundColor = '#ffff66'; // Light Yellow
+        break;
+      case 3:
+        strengthLabel = 'Good';
+        strengthMeter.style.backgroundColor = '#66cc66'; // Light Green
+        break;
+      case 4:
+        strengthLabel = 'Strong';
+        strengthMeter.style.backgroundColor = '#33cc33'; // Green
+        break;
+    }
+
+    strengthText.textContent = `Strength: ${strengthLabel}`;
   });
 </script>
 </body>
