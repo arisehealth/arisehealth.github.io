@@ -39,7 +39,7 @@
   if (window.top !== window.self) {
     console.log(document.referrer)
     // Page is inside an iframe
-    if (document.referrer !== 'https://onboarding.wearise.com/flow/onboarding/variant/v5?formsortEnv=staging') {
+    if (!document.referrer.startsWith("https://onboarding.wearise.com/")) {
       // If the referrer is not the authorized domain, redirect or show a message
       document.body.innerHTML = 'This content can only be viewed from an authorized source.';
     }
