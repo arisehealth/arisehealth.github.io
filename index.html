@@ -4,10 +4,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Document</title>
+  <script
+      lang="text/javascript"
+      src="https://unpkg.com/@formsort/custom-question-api"
+  ></script>
 </head>
 <body>
 
 <label for="my-input">Password</label><input id="my-input" type="password"/>
 
+<script>
+  const inputEl = document.querySelector('#my-input');
+  // inputEl.addEventListener('change', e => {
+  //   setAnswerValue(e.target.value);
+  // })
+  // Ensure that the library is loaded before using it
+  document.addEventListener("DOMContentLoaded", function () {
+    // Check if the customQuestionApi object is available
+    if (typeof customQuestionApi !== 'undefined') {
+      // Use the setAnswerValue function
+      customQuestionApi.setAnswerValue("your-answer-value");
+    } else {
+      console.error("customQuestionApi is not available.");
+    }
+  });
+</script>
 </body>
 </html>
