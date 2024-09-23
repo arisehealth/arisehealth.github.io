@@ -15,9 +15,10 @@
 
 <script>
   const inputEl = document.querySelector('#my-input');
-  // inputEl.addEventListener('change', e => {
-  //   setAnswerValue(e.target.value);
-  // })
+  inputEl.addEventListener('change', e => {
+    // setAnswerValue(e.target.value);
+    console.log(e.target.value)
+  })
   // Ensure that the library is loaded before using it
   document.addEventListener("DOMContentLoaded", function () {
     // Check if the customQuestionApi object is available
