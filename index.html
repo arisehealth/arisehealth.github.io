@@ -16,18 +16,19 @@
 <script>
   const inputEl = document.querySelector('#my-input');
   inputEl.addEventListener('change', e => {
-    // setAnswerValue(e.target.value);
+    formsort.setAnswerValue(e.target.value);
     console.log(e.target.value)
   })
   // Ensure that the library is loaded before using it
   document.addEventListener("DOMContentLoaded", function () {
+    console.log(formsort)
     // Check if the customQuestionApi object is available
-    if (typeof customQuestionApi !== 'undefined') {
-      // Use the setAnswerValue function
-      customQuestionApi.setAnswerValue("your-answer-value");
-    } else {
-      console.error("customQuestionApi is not available.");
-    }
+    // if (typeof formsort !== 'undefined') {
+    //   // Use the setAnswerValue function
+    //   formsort.setAnswerValue("your-answer-value");
+    // } else {
+    //   console.error("customQuestionApi is not available.");
+    // }
   });
 </script>
 </body>
