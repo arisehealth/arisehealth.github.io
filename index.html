@@ -37,9 +37,15 @@
 <script>
   <!--  Only allow this page to be seen from formsort flow-->
   if (window.top !== window.self) {
-    console.log(document.referrer)
+    const allowedDomains = [
+      "https://www.wearise.com/",
+      "https://onboarding.wearise.com/"
+    ];
+
+    const isAllowed = allowedDomains.some(domain => document.referrer.startsWith(domain));
+
     // Page is inside an iframe
-    if (!document.referrer.startsWith("https://onboarding.wearise.com/") || !document.referrer.startsWith("https://www.wearise.com/")) {
+    if (!isAllowed) {
       // If the referrer is not the authorized domain, redirect or show a message
       document.body.innerHTML = 'This content can only be viewed from an authorized source.';
     }
