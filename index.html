@@ -11,6 +11,20 @@
   <!-- zxcvbn: password strength estimator inspired by password crackers -->
   <script src="https://cdn.jsdelivr.net/npm/zxcvbn@4.4.2/dist/zxcvbn.min.js"></script>
   <style>
+    input {
+      background-color: rgba(255,255,255,1);
+      border-radius: 8px;
+      border-color: rgba(220,223,232,1);
+      padding: 16px;
+      font-weight: 300;
+      border-width: 1px;
+      margin-top: 8px;
+      margin-bottom: 8px;
+      font-size: 1rem;
+      font-style: normal;
+      font-family: "VC Cardinal Wide";
+    }
+
     #strength-meter {
       margin-top: 10px;
       height: 10px;
@@ -27,8 +41,7 @@
 </head>
 <body>
 
-<label for="my-input">Password</label>
-<input id="my-input" type="password"/>
+<input id="iframe-pwd" type="password"/>
 <div id="strength-meter">
   <div id="strength-bar"></div>
 </div>
@@ -55,7 +68,7 @@
     window.location.href = 'https://wearise.com';
   }
 
-  const inputEl = document.querySelector('#my-input');
+  const inputEl = document.querySelector('#iframe-pwd');
   const strengthMeter = document.getElementById('strength-bar');
   const strengthText = document.getElementById('strength-text');
 
@@ -69,6 +82,7 @@
       })
     }
   })
+
   // Password strength meter using zxcvbn
   inputEl.addEventListener('input', function () {
     const passwordValue = inputEl.value;
