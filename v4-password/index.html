@@ -153,6 +153,7 @@
 
     strengthBars.forEach((bar, index) => {
       bar.style.width = index <= score ? '20%' : '0';
+      bar.classList.add(`strength-${score}`)
     });
 
     const strengthText = [
@@ -213,8 +214,6 @@
   const lowercaseCheck = document.getElementById('lowercase-check');
   const numberSymbolCheck = document.getElementById('number-symbol-check');
 
-  let isPwdValid = false;
-
   /**
    * When the value of password changes (keystroke, paste, or any other
    * modification to the input's value) validate password rules and
@@ -239,15 +238,13 @@
 
     // Password strength meter using zxcvbn
     const result = zxcvbn(passwordValue);
-    console.log(result);
     updateStrengthMeter(result["score"]);
 
-    console.log("isPwdValid", isPwdValid)
-
-    // If password is valid and the score is 3 or 4, set the answer value
-    // if (isPwdValid && typeof formsort !== 'undefined') {
-    //   formsort.setAnswerValue(passwordValue);
-    // }
+    // If password is valid and the score is 3 or 4, set the answer
+    // (this sends result to Formsort and enable the continue button)
+    if (result["score"] > 2 && typeof formsort !== 'undefined') {
+      formsort.setAnswerValue(passwordValue);
+    }
   });
 
 </script>
