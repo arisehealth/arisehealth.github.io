@@ -66,6 +66,7 @@
       font-size: 14px;
       color: #555;
       margin-bottom: 16px;
+      text-align: right;
     }
 
     #password-container .toggle-btn {
@@ -150,10 +151,6 @@
    */
   function updateStrengthMeter(score) {
     const strengthBars = document.getElementById('password-strength').querySelectorAll('div');
-
-    // strengthBars.forEach((bar, index) => {
-    //   bar.style.width = index <= score ? '20%' : '0';
-    // });
 
     // Reset all bars to default color and width
     strengthBars.forEach((bar) => {
