@@ -40,26 +40,6 @@
       transition: background-color 0.3s; /* Smooth transition for color change */
     }
 
-    /*.password-strength div.strength-1 {*/
-    /*  background-color: #ff4d4d; !* Very Weak *!*/
-    /*}*/
-
-    /*.password-strength div.strength-2 {*/
-    /*  background-color: #ffcc00; !* Weak *!*/
-    /*}*/
-
-    /*.password-strength div.strength-3 {*/
-    /*  background-color: #ffdb58; !* Fair *!*/
-    /*}*/
-
-    /*.password-strength div.strength-4 {*/
-    /*  background-color: #66cc66; !* Good *!*/
-    /*}*/
-
-    /*.password-strength div.strength-5 {*/
-    /*  background-color: #33cc33; !* Strong *!*/
-    /*}*/
-
     #password-container .strength-label {
       font-size: 14px;
       color: #555;
@@ -93,7 +73,7 @@
       margin: 8px 0;
       outline: none;
       padding: 16px;
-
+      width: 100%;
     }
 
     input:focus {
@@ -104,7 +84,7 @@
 <body>
 
 <div id="password-container">
-  <div style="position: relative; width: 100px;">
+  <div style="position: relative;">
     <input type="password" id="iframe-pwd">
     <button class="toggle-btn" id="togglePassword">Show</button>
   </div>
