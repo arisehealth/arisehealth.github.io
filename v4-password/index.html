@@ -99,6 +99,10 @@
   // Ensure that the library is loaded before using it
   document.addEventListener("DOMContentLoaded", function () {
 
+    const width = document.body.offsetWidth;
+    const height = document.body.offsetHeight;
+    formsort.setQuestionSize(width, height);
+
     // Check the Formsort library is available
     if (typeof formsort !== 'undefined') {
       inputEl.addEventListener('change', e => {
