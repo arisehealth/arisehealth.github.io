@@ -140,12 +140,6 @@
   </ul>
 </div>
 
-<!--<div id="strength-meter">-->
-<!--  <div id="strength-bar"></div>-->
-<!--</div>-->
-<!--<p id="strength-text">Strength: </p>-->
-
-
 <script>
   /**
    * Helper function to update validation styles
@@ -168,7 +162,7 @@
    * @param score
    */
   function updateStrengthMeter(score) {
-    const strengthBars = strengthMeter.querySelectorAll('div');
+    const strengthBars = document.getElementById('password-strength').querySelectorAll('div');
 
     strengthBars.forEach((bar, index) => {
       bar.style.width = index <= score ? '20%' : '0';
@@ -226,10 +220,6 @@
     togglePasswordButton.textContent = type === 'password' ? 'Show' : 'Hide';
   });
 
-
-  const strengthMeter = document.getElementById('strength-bar');
-  const strengthText = document.getElementById('strength-text');
-
   // Validation list items
   const lengthCheck = document.getElementById('length-check');
   const uppercaseCheck = document.getElementById('uppercase-check');
@@ -264,43 +254,6 @@
     const result = zxcvbn(passwordValue);
     updateStrengthMeter(result["score"]);
 
-
-    // // Map the score to a percentage for the strength bar
-    // const score = result["score"];
-    // const strengthPercentage = (score + 1) * 20; // Score is 0-4, so we map to 0-100%
-    //
-    // // Update strength bar and text
-    // strengthMeter.style.width = `${strengthPercentage}%`;
-    //
-    // let strengthLabel = '';
-    // switch (score) {
-    //   case 0:
-    //     strengthLabel = 'Very Weak';
-    //     strengthMeter.style.backgroundColor = '#ff4d4d'; // Red
-    //     break;
-    //   case 1:
-    //     strengthLabel = 'Weak';
-    //     strengthMeter.style.backgroundColor = '#ffcc00'; // Yellow
-    //     break;
-    //   case 2:
-    //     strengthLabel = 'Fair';
-    //     strengthMeter.style.backgroundColor = '#ffff66'; // Light Yellow
-    //     break;
-    //   case 3:
-    //     strengthLabel = 'Good';
-    //     strengthMeter.style.backgroundColor = '#66cc66'; // Light Green
-    //     isPwdValid = true;
-    //     break;
-    //   case 4:
-    //     strengthLabel = 'Strong';
-    //     strengthMeter.style.backgroundColor = '#33cc33'; // Green
-    //     isPwdValid = true;
-    //     break;
-    // }
-    //
-    // strengthText.textContent = `Strength: ${strengthLabel}`;
-
-
     console.log("isPwdValid", isPwdValid)
 
     // If password is valid and the score is 3 or 4, set the answer value
@@ -308,19 +261,6 @@
     //   formsort.setAnswerValue(passwordValue);
     // }
   });
-  //
-  // // Ensure that the library is loaded before using it
-  // document.addEventListener("DOMContentLoaded", function () {
-  //   // Check the Formsort library is available
-  //   if (typeof formsort !== 'undefined') {
-  //     if (isPwdValid) {
-  //       inputEl.addEventListener('change', e => {
-  //         formsort.setAnswerValue(e.target.value);
-  //       })
-  //     }
-  //   }
-  // })
-
 
 </script>
 </body>
