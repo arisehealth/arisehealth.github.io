@@ -151,10 +151,36 @@
   function updateStrengthMeter(score) {
     const strengthBars = document.getElementById('password-strength').querySelectorAll('div');
 
-    strengthBars.forEach((bar, index) => {
-      bar.style.width = index <= score ? '20%' : '0';
-      bar.classList.add(`strength-${score}`)
+    // strengthBars.forEach((bar, index) => {
+    //   bar.style.width = index <= score ? '20%' : '0';
+    // });
+
+    // Reset all bars to default color and width
+    strengthBars.forEach((bar) => {
+      bar.style.backgroundColor = '#e0e0e0';
+      bar.style.width = '20%'; // Full width
     });
+
+    // Update bars based on the score
+    for (let i = 0; i <= score; i++) {
+      switch (score) {
+        case 0:
+          strengthBars[i].style.backgroundColor = '#ff4d4d'; // Very Weak
+          break;
+        case 1:
+          strengthBars[i].style.backgroundColor = '#ffcc00'; // Weak
+          break;
+        case 2:
+          strengthBars[i].style.backgroundColor = '#ffdb58'; // Fair
+          break;
+        case 3:
+          strengthBars[i].style.backgroundColor = '#66cc66'; // Good
+          break;
+        case 4:
+          strengthBars[i].style.backgroundColor = '#33cc33'; // Strong
+          break;
+      }
+    }
 
     const strengthText = [
       'Very weak',
