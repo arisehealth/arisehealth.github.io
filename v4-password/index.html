@@ -96,13 +96,14 @@
   const lowercaseCheck = document.getElementById('lowercase-check');
   const numberSymbolCheck = document.getElementById('number-symbol-check');
 
-  // Ensure that the library is loaded before using it
-  document.addEventListener("DOMContentLoaded", function () {
-
+  window.addEventListener('load', () => {
     const width = document.body.offsetWidth;
     const height = document.body.offsetHeight;
     formsort.setQuestionSize(width, height);
+  })
 
+  // Ensure that the library is loaded before using it
+  document.addEventListener("DOMContentLoaded", function () {
     // Check the Formsort library is available
     if (typeof formsort !== 'undefined') {
       inputEl.addEventListener('change', e => {
