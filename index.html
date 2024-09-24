@@ -68,8 +68,7 @@
     const allowedDomains = [
       "https://www.wearise.com/",
       "https://onboarding.wearise.com/",
-      "https://studio.formsort.com/",
-      "https://arisehealth.github.io"
+      "https://studio.formsort.com/"
     ];
 
     const isAllowed = allowedDomains.some(domain => document.referrer.startsWith(domain));
@@ -80,10 +79,10 @@
       document.body.innerHTML = 'This content can only be viewed from an authorized source.';
     }
   }
-  else {
-    // Not inside an iframe, you can redirect or hide content here
-    window.location.href = 'https://wearise.com';
-  }
+  // else {
+  //   // Not inside an iframe, you can redirect or hide content here
+  //   window.location.href = 'https://wearise.com';
+  // }
 
   const inputEl = document.querySelector('#iframe-pwd');
   const strengthMeter = document.getElementById('strength-bar');
