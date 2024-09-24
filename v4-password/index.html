@@ -239,6 +239,7 @@
 
     // Password strength meter using zxcvbn
     const result = zxcvbn(passwordValue);
+    console.log(result);
     updateStrengthMeter(result["score"]);
 
     console.log("isPwdValid", isPwdValid)
