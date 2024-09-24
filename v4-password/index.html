@@ -74,7 +74,8 @@
       cursor: pointer;
       position: absolute;
       right: 8px;
-      top: 50%; transform: translateY(-50%);
+      top: 50%;
+      transform: translateY(-50%);
     }
 
     #password-container .toggle-btn:focus {
@@ -108,6 +109,27 @@
 </div>
 
 <script>
+  <!--  Only allow this page to be seen from formsort flow-->
+  if (window.top !== window.self) {
+    const allowedDomains = [
+      "https://www.wearise.com/",
+      "https://onboarding.wearise.com/",
+      "https://studio.formsort.com/"
+    ];
+
+    const isAllowed = allowedDomains.some(domain => document.referrer.startsWith(domain));
+
+    // Page is inside an iframe
+    if (!isAllowed) {
+      // If the referrer is not the authorized domain, redirect or show a message
+      document.body.innerHTML = 'This content can only be viewed from an authorized source.';
+    }
+  }
+  else {
+    // Not inside an iframe, you can redirect or hide content here
+    window.location.href = 'https://wearise.com';
+  }
+
   /**
    * Helper function to update validation styles
    * @param element
@@ -125,6 +147,7 @@
   }
 
   /**
+   * Updates colors of meter bar depending on score
    *
    * @param score
    */
@@ -169,27 +192,6 @@
     const strengthLabel = document.getElementById('strength-label');
     strengthLabel.textContent = strengthText[score];
   }
-
-  <!--  Only allow this page to be seen from formsort flow-->
-  // if (window.top !== window.self) {
-  //   const allowedDomains = [
-  //     "https://www.wearise.com/",
-  //     "https://onboarding.wearise.com/",
-  //     "https://studio.formsort.com/"
-  //   ];
-  //
-  //   const isAllowed = allowedDomains.some(domain => document.referrer.startsWith(domain));
-  //
-  //   // Page is inside an iframe
-  //   if (!isAllowed) {
-  //     // If the referrer is not the authorized domain, redirect or show a message
-  //     document.body.innerHTML = 'This content can only be viewed from an authorized source.';
-  //   }
-  // }
-  // else {
-  //   // Not inside an iframe, you can redirect or hide content here
-  //   window.location.href = 'https://wearise.com';
-  // }
 
   /**
    * Help formsort size iframe correctly
@@ -242,10 +244,14 @@
     const result = zxcvbn(passwordValue);
     updateStrengthMeter(result["score"]);
 
-    // If password is valid and the score is 3 or 4, set the answer
-    // (this sends result to Formsort and enable the continue button)
+    /**
+     * If the library is defined, send values to formsort:
+     *
+     * - Only send scores 3 or 4 (good or strong)
+     * - If score is low, remove value (which will remove Continue button)
+     */
     if (typeof formsort !== 'undefined') {
-      if (result["score"] > 2 ) {
+      if (result["score"] > 2) {
         formsort.setAnswerValue(passwordValue);
       }
       if (result["score"] < 3) {
