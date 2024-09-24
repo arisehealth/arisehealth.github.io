@@ -147,18 +147,43 @@
 
 
 <script>
-  // Helper function to update validation styles
+  /**
+   * Helper function to update validation styles
+   * @param element
+   * @param isValid
+   */
   function styleRequirements(element, isValid) {
     if (isValid) {
       element.style.color = 'green';
       element.classList.remove('invalid');
-      element.style.listStyle = "url('img/check-solid.svg')";
     }
     else {
       element.style.color = 'red';
       element.classList.add('invalid');
-      element.style.listStyle = "url('img/xmark-solid.svg')";
     }
+  }
+
+  /**
+   *
+   * @param score
+   */
+  function updateStrengthMeter(score) {
+    const strengthBars = strengthMeter.querySelectorAll('div');
+
+    strengthBars.forEach((bar, index) => {
+      bar.style.width = index <= score ? '20%' : '0';
+    });
+
+    const strengthText = [
+      'Very weak',
+      'Weak',
+      'Fair',
+      'Good',
+      'Strong'
+    ];
+
+    const strengthLabel = document.getElementById('strength-label');
+    strengthLabel.textContent = strengthText[score];
   }
 
   <!--  Only allow this page to be seen from formsort flow-->
@@ -182,14 +207,18 @@
   //   window.location.href = 'https://wearise.com';
   // }
 
-  // Help formsort size iframe correctly
+  /**
+   * Help formsort size iframe correctly
+   */
   window.addEventListener('load', () => {
     const width = document.body.offsetWidth;
     const height = document.body.offsetHeight;
     formsort.setQuestionSize(width, height);
   })
 
-  // Show or Hide password
+  /**
+   * Show or Hide password
+   */
   const togglePasswordButton = document.getElementById('togglePassword');
   togglePasswordButton.addEventListener('click', () => {
     const type = pwdInput.type === 'password' ? 'text' : 'password';
@@ -197,11 +226,9 @@
     togglePasswordButton.textContent = type === 'password' ? 'Show' : 'Hide';
   });
 
-  const pwdInput = document.querySelector('#iframe-pwd');
+
   const strengthMeter = document.getElementById('strength-bar');
   const strengthText = document.getElementById('strength-text');
-
-  const validationList = document.getElementById('validation-list');
 
   // Validation list items
   const lengthCheck = document.getElementById('length-check');
@@ -209,11 +236,14 @@
   const lowercaseCheck = document.getElementById('lowercase-check');
   const numberSymbolCheck = document.getElementById('number-symbol-check');
 
-
-
   let isPwdValid = false;
 
-  // Password strength meter using zxcvbn
+  /**
+   * When the value of password changes (keystroke, paste, or any other
+   * modification to the input's value) validate password rules and
+   * password strength
+   */
+  const pwdInput = document.querySelector('#iframe-pwd');
   pwdInput.addEventListener('input', function () {
     const passwordValue = pwdInput.value;
 
@@ -221,18 +251,18 @@
     const lengthValid = passwordValue.length >= 8;
     const uppercaseValid = /[A-Z]/.test(passwordValue);
     const lowercaseValid = /[a-z]/.test(passwordValue);
-    const numberSymbolValid = /[\d\W]/.test(passwordValue); // Matches any digit or non-word character
+    // Matches any digit or non-word character
+    const numberSymbolValid = /[\d\W]/.test(passwordValue);
 
-    // Update validation messages
+    // Style text following validation rules
     styleRequirements(lengthCheck, lengthValid);
     styleRequirements(uppercaseCheck, uppercaseValid);
     styleRequirements(lowercaseCheck, lowercaseValid);
     styleRequirements(numberSymbolCheck, numberSymbolValid);
 
-
-
-    // const result = zxcvbn(passwordValue);
-    // updateStrengthMeter(result.score);
+    // Password strength meter using zxcvbn
+    const result = zxcvbn(passwordValue);
+    updateStrengthMeter(result["score"]);
 
 
     // // Map the score to a percentage for the strength bar
@@ -292,20 +322,7 @@
   //   }
   // })
 
-  function updateStrengthMeter(score) {
-    strengthBars.forEach((bar, index) => {
-      bar.style.width = index <= score ? '20%' : '0';
-    });
 
-    const strengthText = [
-      'Very weak',
-      'Weak',
-      'Fair',
-      'Good',
-      'Strong'
-    ];
-    strengthLabel.textContent = strengthText[score];
-  }
 
 
 </script>
