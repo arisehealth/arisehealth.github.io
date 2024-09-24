@@ -16,36 +16,45 @@
       margin: 0;
     }
 
-    /* Show password button inside input */
-    #togglePassword {
-      background: none;
-      border: none;
-      color: #0073e6;
-      font-size: 14px;
-      cursor: pointer;
-      position: absolute;
-      right: 16px;
-      top: 50%;
+    .password-container {
+      width: 350px;
+      padding: 20px;
+      background-color: #ffffff;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
     }
 
-    #togglePassword:focus {
+    .password-container label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .password-container input[type="password"], .password-container input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ccd1d9;
+      border-radius: 4px;
       outline: none;
+      margin-bottom: 8px;
+      box-sizing: border-box;
     }
 
-    #password-strength {
+    .password-container .password-strength {
       border: 1px solid red;
       display: flex;
       justify-content: space-between;
       height: 4px;
+      background-color: #e0e0e0;
+      border-radius: 2px;
       margin: 8px 0 16px;
       overflow: hidden;
     }
 
-    #password-strength div {
-      border-radius: 2px;
+    .password-container .password-strength div {
       height: 100%;
       transition: width 0.3s;
-      background-color: #e0e0e0;
     }
 
     .password-strength div.strength-1 {
@@ -68,10 +77,25 @@
       background-color: #33cc33; /* Strong */
     }
 
-    #strength-label {
+    .password-container .strength-label {
       font-size: 14px;
       color: #555;
       margin-bottom: 16px;
+    }
+
+    .password-container .toggle-btn {
+      background: none;
+      border: none;
+      color: #0073e6;
+      font-size: 14px;
+      cursor: pointer;
+      position: absolute;
+      right: 16px;
+      top: 38px;
+    }
+
+    .password-container .toggle-btn:focus {
+      outline: none;
     }
 
     input {
@@ -108,23 +132,25 @@
 </head>
 <body>
 
-<div style="position: relative;">
-  <input type="password" id="iframe-pwd">
-  <button class="toggle-btn" id="togglePassword">Show</button>
+<div class="password-container">
+  <div style="position: relative;">
+    <input type="password" id="iframe-pwd">
+    <button class="toggle-btn" id="togglePassword">Show</button>
+  </div>
+  <div class="password-strength" id="password-strength">
+    <div class="strength-1"></div>
+    <div class="strength-2"></div>
+    <div class="strength-3"></div>
+    <div class="strength-4"></div>
+    <div class="strength-5"></div>
+  </div>
+  <div class="strength-label" id="strength-label">Password strength</div>
 </div>
-<div class="password-strength" id="password-strength">
-  <div class="strength-1"></div>
-  <div class="strength-2"></div>
-  <div class="strength-3"></div>
-  <div class="strength-4"></div>
-  <div class="strength-5"></div>
-</div>
-<div class="strength-label" id="strength-label">Password strength</div>
 
 <!--<div id="strength-meter">-->
 <!--  <div id="strength-bar"></div>-->
 <!--</div>-->
-<p id="strength-text">Strength: </p>
+<!--<p id="strength-text">Strength: </p>-->
 <ul id="validation-list">
   <li id="length-check">At least 8 characters long</li>
   <li id="uppercase-check">Contains an uppercase letter</li>
