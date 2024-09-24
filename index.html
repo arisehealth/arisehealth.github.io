@@ -24,10 +24,10 @@
       font-size: 1rem;
       font-style: normal;
       font-weight: 300;
-      margin: 0 8px;
+      margin: 8px 0;
       outline: none;
       padding: 16px;
-      width: 90%;
+      width: 95%;
     }
 
     input:focus {
@@ -79,10 +79,10 @@
       document.body.innerHTML = 'This content can only be viewed from an authorized source.';
     }
   }
-  // else {
-  //   // Not inside an iframe, you can redirect or hide content here
-  //   window.location.href = 'https://wearise.com';
-  // }
+  else {
+    // Not inside an iframe, you can redirect or hide content here
+    window.location.href = 'https://wearise.com';
+  }
 
   const inputEl = document.querySelector('#iframe-pwd');
   const strengthMeter = document.getElementById('strength-bar');
