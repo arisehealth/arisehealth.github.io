@@ -37,6 +37,7 @@
       outline: none;
       padding: 16px;
       width: 100%;
+      box-sizing: border-box;
     }
 
     #password-container .password-strength {
@@ -69,14 +70,12 @@
       cursor: pointer;
       position: absolute;
       right: 16px;
-      top: 38px;
+      top: 50%; transform: translateY(-50%);
     }
 
     #password-container .toggle-btn:focus {
       outline: none;
     }
-
-
 
     input:focus {
       border-color: rgb(9, 26, 79);
@@ -92,11 +91,11 @@
   </div>
 
   <div class="password-strength" id="password-strength">
-    <div class="strength-1"></div>
-    <div class="strength-2"></div>
-    <div class="strength-3"></div>
-    <div class="strength-4"></div>
-    <div class="strength-5"></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
   </div>
   <div class="strength-label" id="strength-label">Password strength</div>
 
