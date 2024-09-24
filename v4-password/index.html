@@ -16,6 +16,62 @@
       margin: 0;
     }
 
+    .password-strength {
+      display: flex;
+      justify-content: space-between;
+      height: 4px;
+      background-color: #e0e0e0;
+      border-radius: 2px;
+      margin: 8px 0 16px;
+      overflow: hidden;
+    }
+
+    .password-container .password-strength div {
+      height: 100%;
+      transition: width 0.3s;
+    }
+
+    .password-strength div.strength-1 {
+      background-color: #ff4d4d; /* Very Weak */
+    }
+
+    .password-strength div.strength-2 {
+      background-color: #ffcc00; /* Weak */
+    }
+
+    .password-strength div.strength-3 {
+      background-color: #ffdb58; /* Fair */
+    }
+
+    .password-strength div.strength-4 {
+      background-color: #66cc66; /* Good */
+    }
+
+    .password-strength div.strength-5 {
+      background-color: #33cc33; /* Strong */
+    }
+
+    .password-container .strength-label {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 16px;
+    }
+
+    .password-container .toggle-btn {
+      background: none;
+      border: none;
+      color: #0073e6;
+      font-size: 14px;
+      cursor: pointer;
+      position: absolute;
+      right: 16px;
+      top: 38px;
+    }
+
+    .password-container .toggle-btn:focus {
+      outline: none;
+    }
+
     input {
       background-color: rgba(255, 255, 255, 1);
       border-radius: 8px;
@@ -34,26 +90,38 @@
       border-color: rgb(9, 26, 79);
     }
 
-    #strength-meter {
-      margin-top: 10px;
-      height: 10px;
-      width: 100%;
-      background-color: #e0e0e0;
-    }
+    /*#strength-meter {*/
+    /*  margin-top: 10px;*/
+    /*  height: 10px;*/
+    /*  width: 100%;*/
+    /*  background-color: #e0e0e0;*/
+    /*}*/
 
-    #strength-meter div {
-      height: 100%;
-      width: 0;
-      transition: width 0.5s;
-    }
+    /*#strength-meter div {*/
+    /*  height: 100%;*/
+    /*  width: 0;*/
+    /*  transition: width 0.5s;*/
+    /*}*/
   </style>
 </head>
 <body>
 
-<input id="iframe-pwd" type="password"/>
-<div id="strength-meter">
-  <div id="strength-bar"></div>
+<div style="position: relative;">
+  <input type="password" id="iframe-pwd">
+  <button class="toggle-btn" id="togglePassword">Show</button>
 </div>
+<div class="password-strength" id="password-strength">
+  <div class="strength-1"></div>
+  <div class="strength-2"></div>
+  <div class="strength-3"></div>
+  <div class="strength-4"></div>
+  <div class="strength-5"></div>
+</div>
+<div class="strength-label" id="strength-label">Password strength</div>
+
+<!--<div id="strength-meter">-->
+<!--  <div id="strength-bar"></div>-->
+<!--</div>-->
 <p id="strength-text">Strength: </p>
 <ul id="validation-list">
   <li id="length-check">At least 8 characters long</li>
@@ -84,11 +152,17 @@
   //   window.location.href = 'https://wearise.com';
   // }
 
-  const inputEl = document.querySelector('#iframe-pwd');
+  const pwdInput = document.querySelector('#iframe-pwd');
   const strengthMeter = document.getElementById('strength-bar');
   const strengthText = document.getElementById('strength-text');
 
   const validationList = document.getElementById('validation-list');
+  const togglePasswordButton = document.getElementById('togglePassword');
+  togglePasswordButton.addEventListener('click', () => {
+    const type = pwdInput.type === 'password' ? 'text' : 'password';
+    pwdInput.type = type;
+    togglePasswordButton.textContent = type === 'password' ? 'Show' : 'Hide';
+  });
 
   // Validation list items
   const lengthCheck = document.getElementById('length-check');
@@ -105,44 +179,46 @@
   let isPwdValid = false;
 
   // Password strength meter using zxcvbn
-  inputEl.addEventListener('input', function () {
-    const passwordValue = inputEl.value;
+  pwdInput.addEventListener('input', function () {
+    const passwordValue = pwdInput.value;
     const result = zxcvbn(passwordValue);
+    updateStrengthMeter(result.score);
 
-    // Map the score to a percentage for the strength bar
-    const score = result["score"];
-    const strengthPercentage = (score + 1) * 20; // Score is 0-4, so we map to 0-100%
 
-    // Update strength bar and text
-    strengthMeter.style.width = `${strengthPercentage}%`;
-
-    let strengthLabel = '';
-    switch (score) {
-      case 0:
-        strengthLabel = 'Very Weak';
-        strengthMeter.style.backgroundColor = '#ff4d4d'; // Red
-        break;
-      case 1:
-        strengthLabel = 'Weak';
-        strengthMeter.style.backgroundColor = '#ffcc00'; // Yellow
-        break;
-      case 2:
-        strengthLabel = 'Fair';
-        strengthMeter.style.backgroundColor = '#ffff66'; // Light Yellow
-        break;
-      case 3:
-        strengthLabel = 'Good';
-        strengthMeter.style.backgroundColor = '#66cc66'; // Light Green
-        isPwdValid = true;
-        break;
-      case 4:
-        strengthLabel = 'Strong';
-        strengthMeter.style.backgroundColor = '#33cc33'; // Green
-        isPwdValid = true;
-        break;
-    }
-
-    strengthText.textContent = `Strength: ${strengthLabel}`;
+    // // Map the score to a percentage for the strength bar
+    // const score = result["score"];
+    // const strengthPercentage = (score + 1) * 20; // Score is 0-4, so we map to 0-100%
+    //
+    // // Update strength bar and text
+    // strengthMeter.style.width = `${strengthPercentage}%`;
+    //
+    // let strengthLabel = '';
+    // switch (score) {
+    //   case 0:
+    //     strengthLabel = 'Very Weak';
+    //     strengthMeter.style.backgroundColor = '#ff4d4d'; // Red
+    //     break;
+    //   case 1:
+    //     strengthLabel = 'Weak';
+    //     strengthMeter.style.backgroundColor = '#ffcc00'; // Yellow
+    //     break;
+    //   case 2:
+    //     strengthLabel = 'Fair';
+    //     strengthMeter.style.backgroundColor = '#ffff66'; // Light Yellow
+    //     break;
+    //   case 3:
+    //     strengthLabel = 'Good';
+    //     strengthMeter.style.backgroundColor = '#66cc66'; // Light Green
+    //     isPwdValid = true;
+    //     break;
+    //   case 4:
+    //     strengthLabel = 'Strong';
+    //     strengthMeter.style.backgroundColor = '#33cc33'; // Green
+    //     isPwdValid = true;
+    //     break;
+    // }
+    //
+    // strengthText.textContent = `Strength: ${strengthLabel}`;
 
     // Validation rules
     const lengthValid = passwordValue.length >= 8;
@@ -175,6 +251,21 @@
   //     }
   //   }
   // })
+
+  function updateStrengthMeter(score) {
+    strengthBars.forEach((bar, index) => {
+      bar.style.width = index <= score ? '20%' : '0';
+    });
+
+    const strengthText = [
+      'Very weak',
+      'Weak',
+      'Fair',
+      'Good',
+      'Strong'
+    ];
+    strengthLabel.textContent = strengthText[score];
+  }
 
   // Helper function to update validation styles
   function updateValidation(element, isValid) {
