@@ -47,6 +47,12 @@
   <div id="strength-bar"></div>
 </div>
 <p id="strength-text"></p>
+<ul id="validation-list">
+  <li id="length-check">At least 8 characters long</li>
+  <li id="uppercase-check">Contains an uppercase letter</li>
+  <li id="lowercase-check">Contains a lowercase letter</li>
+  <li id="number-symbol-check">Contains a number or symbol</li>
+</ul>
 
 <script>
   <!--  Only allow this page to be seen from formsort flow-->
@@ -73,6 +79,14 @@
   const inputEl = document.querySelector('#iframe-pwd');
   const strengthMeter = document.getElementById('strength-bar');
   const strengthText = document.getElementById('strength-text');
+
+  const validationList = document.getElementById('validation-list');
+
+  // Validation list items
+  const lengthCheck = document.getElementById('length-check');
+  const uppercaseCheck = document.getElementById('uppercase-check');
+  const lowercaseCheck = document.getElementById('lowercase-check');
+  const numberSymbolCheck = document.getElementById('number-symbol-check');
 
   // Ensure that the library is loaded before using it
   document.addEventListener("DOMContentLoaded", function () {
@@ -122,7 +136,30 @@
     }
 
     strengthText.textContent = `Strength: ${strengthLabel}`;
+
+    // Validation rules
+    const lengthValid = passwordValue.length >= 8;
+    const uppercaseValid = /[A-Z]/.test(passwordValue);
+    const lowercaseValid = /[a-z]/.test(passwordValue);
+    const numberSymbolValid = /[\d\W]/.test(passwordValue); // Matches any digit or non-word character
+
+    // Update validation messages
+    updateValidation(lengthCheck, lengthValid);
+    updateValidation(uppercaseCheck, uppercaseValid);
+    updateValidation(lowercaseCheck, lowercaseValid);
+    updateValidation(numberSymbolCheck, numberSymbolValid);
   });
+
+  // Helper function to update validation styles
+  function updateValidation(element, isValid) {
+    if (isValid) {
+      element.style.color = 'green';
+      element.classList.remove('invalid');
+    } else {
+      element.style.color = 'red';
+      element.classList.add('invalid');
+    }
+  }
 </script>
 </body>
 </html>
