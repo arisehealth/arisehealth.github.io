@@ -16,6 +16,22 @@
       margin: 0;
     }
 
+    /* Show password button inside input */
+    .toggle-btn {
+      background: none;
+      border: none;
+      color: #0073e6;
+      font-size: 14px;
+      cursor: pointer;
+      position: absolute;
+      right: 16px;
+      top: 38px;
+    }
+
+    .toggle-btn:focus {
+      outline: none;
+    }
+
     .password-strength {
       display: flex;
       justify-content: space-between;
@@ -57,20 +73,7 @@
       margin-bottom: 16px;
     }
 
-    .password-container .toggle-btn {
-      background: none;
-      border: none;
-      color: #0073e6;
-      font-size: 14px;
-      cursor: pointer;
-      position: absolute;
-      right: 16px;
-      top: 38px;
-    }
 
-    .password-container .toggle-btn:focus {
-      outline: none;
-    }
 
     input {
       background-color: rgba(255, 255, 255, 1);
