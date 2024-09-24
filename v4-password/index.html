@@ -20,11 +20,13 @@
       font-size: 14px;
     }
 
-    .password-container {
+    #password-container {
+      width: 95%;
     }
 
-    .password-container .password-strength {
+    #password-container .password-strength {
       display: flex;
+      gap: 4px;
       justify-content: space-between;
       background-color: #e0e0e0;
       border-radius: 2px;
@@ -32,11 +34,9 @@
       margin: 8px 0;
     }
 
-    .password-container .password-strength div {
-      /*height: 100%;*/
-      /*transition: width 0.3s;*/
+    #password-container .password-strength div {
       flex: 1; /* Make each segment take equal space */
-      margin-right: 4px; /* Space between segments */
+      /*margin-right: 4px; !* Space between segments *!*/
       background-color: #d1d5db; /* Default gray color */
       border-radius: 4px; /* Rounded corners */
       transition: background-color 0.3s; /* Smooth transition for color change */
@@ -62,13 +62,13 @@
       background-color: #33cc33; /* Strong */
     }
 
-    .password-container .strength-label {
+    #password-container .strength-label {
       font-size: 14px;
       color: #555;
       margin-bottom: 16px;
     }
 
-    .password-container .toggle-btn {
+    #password-container .toggle-btn {
       background: none;
       border: none;
       color: #0073e6;
@@ -79,7 +79,7 @@
       top: 38px;
     }
 
-    .password-container .toggle-btn:focus {
+    #password-container .toggle-btn:focus {
       outline: none;
     }
 
@@ -94,7 +94,7 @@
       margin: 8px 0;
       outline: none;
       padding: 16px;
-      width: 95%;
+
     }
 
     input:focus {
@@ -117,7 +117,7 @@
 </head>
 <body>
 
-<div class="password-container">
+<div id="password-container">
   <div style="position: relative;">
     <input type="password" id="iframe-pwd">
     <button class="toggle-btn" id="togglePassword">Show</button>
