@@ -17,9 +17,9 @@
     }
 
     input {
-      background-color: rgba(255,255,255,1);
+      background-color: rgba(255, 255, 255, 1);
       border-radius: 8px;
-      border: 1px solid rgba(220,223,232,1);
+      border: 1px solid rgba(220, 223, 232, 1);
       font-family: "VC Cardinal Wide", sans-serif;
       font-size: 1rem;
       font-style: normal;
@@ -31,7 +31,7 @@
     }
 
     input:focus {
-      border-color: rgb(9,26,79);
+      border-color: rgb(9, 26, 79);
     }
 
     #strength-meter {
@@ -102,15 +102,7 @@
     formsort.setQuestionSize(width, height);
   })
 
-  // Ensure that the library is loaded before using it
-  document.addEventListener("DOMContentLoaded", function () {
-    // Check the Formsort library is available
-    if (typeof formsort !== 'undefined') {
-      inputEl.addEventListener('change', e => {
-        formsort.setAnswerValue(e.target.value);
-      })
-    }
-  })
+  let isPwdValid = false;
 
   // Password strength meter using zxcvbn
   inputEl.addEventListener('input', function () {
@@ -118,7 +110,7 @@
     const result = zxcvbn(passwordValue);
 
     // Map the score to a percentage for the strength bar
-    const score = result.score;
+    const score = result["score"];
     const strengthPercentage = (score + 1) * 20; // Score is 0-4, so we map to 0-100%
 
     // Update strength bar and text
@@ -141,10 +133,12 @@
       case 3:
         strengthLabel = 'Good';
         strengthMeter.style.backgroundColor = '#66cc66'; // Light Green
+        isPwdValid = true;
         break;
       case 4:
         strengthLabel = 'Strong';
         strengthMeter.style.backgroundColor = '#33cc33'; // Green
+        isPwdValid = true;
         break;
     }
 
@@ -163,12 +157,25 @@
     updateValidation(numberSymbolCheck, numberSymbolValid);
   });
 
+  // Ensure that the library is loaded before using it
+  document.addEventListener("DOMContentLoaded", function () {
+    // Check the Formsort library is available
+    if (typeof formsort !== 'undefined') {
+      if (isPwdValid) {
+        inputEl.addEventListener('change', e => {
+          formsort.setAnswerValue(e.target.value);
+        })
+      }
+    }
+  })
+
   // Helper function to update validation styles
   function updateValidation(element, isValid) {
     if (isValid) {
       element.style.color = 'green';
       element.classList.remove('invalid');
-    } else {
+    }
+    else {
       element.style.color = 'red';
       element.classList.add('invalid');
     }
