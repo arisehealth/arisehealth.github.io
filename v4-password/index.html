@@ -25,14 +25,14 @@
       cursor: pointer;
       position: absolute;
       right: 16px;
-      top: 38px;
+      top: 50%;
     }
 
     #togglePassword:focus {
       outline: none;
     }
 
-    .password-strength {
+    #password-strength {
       display: flex;
       justify-content: space-between;
       height: 4px;
@@ -42,7 +42,7 @@
       overflow: hidden;
     }
 
-    .password-container .password-strength div {
+    #password-strength div {
       height: 100%;
       transition: width 0.3s;
     }
@@ -67,13 +67,11 @@
       background-color: #33cc33; /* Strong */
     }
 
-    .password-container .strength-label {
+    #strength-label {
       font-size: 14px;
       color: #555;
       margin-bottom: 16px;
     }
-
-
 
     input {
       background-color: rgba(255, 255, 255, 1);
