@@ -80,8 +80,6 @@
     #password-container .toggle-btn:focus {
       outline: none;
     }
-
-
   </style>
 </head>
 <body>
@@ -246,8 +244,13 @@
 
     // If password is valid and the score is 3 or 4, set the answer
     // (this sends result to Formsort and enable the continue button)
-    if (result["score"] > 2 && typeof formsort !== 'undefined') {
-      formsort.setAnswerValue(passwordValue);
+    if (typeof formsort !== 'undefined') {
+      if (result["score"] > 2 ) {
+        formsort.setAnswerValue(passwordValue);
+      }
+      if (result["score"] < 3) {
+        formsort.setAnswerValue(null);
+      }
     }
   });
 
