@@ -22,11 +22,10 @@
     .password-container .password-strength {
       display: flex;
       justify-content: space-between;
-      height: 4px;
       background-color: #e0e0e0;
       border-radius: 2px;
+      height: 4px;
       margin: 8px 0 16px;
-      /*overflow: hidden;*/
     }
 
     .password-container .password-strength div {
@@ -119,28 +118,43 @@
     <input type="password" id="iframe-pwd">
     <button class="toggle-btn" id="togglePassword">Show</button>
   </div>
-  <div class="password-strength" id="password-strength">
-    <div class="strength-1"></div>
-    <div class="strength-2"></div>
-    <div class="strength-3"></div>
-    <div class="strength-4"></div>
-    <div class="strength-5"></div>
-  </div>
-  <div class="strength-label" id="strength-label">Password strength</div>
+
+<!--  <div class="password-strength" id="password-strength">-->
+<!--    <div class="strength-1"></div>-->
+<!--    <div class="strength-2"></div>-->
+<!--    <div class="strength-3"></div>-->
+<!--    <div class="strength-4"></div>-->
+<!--    <div class="strength-5"></div>-->
+<!--  </div>-->
+<!--  <div class="strength-label" id="strength-label">Password strength</div>-->
+
+  <ul id="validation-list">
+    <li id="length-check">At least 8 characters long</li>
+    <li id="uppercase-check">Contains an uppercase letter</li>
+    <li id="lowercase-check">Contains a lowercase letter</li>
+    <li id="number-symbol-check">Contains a number or symbol</li>
+  </ul>
 </div>
 
 <!--<div id="strength-meter">-->
 <!--  <div id="strength-bar"></div>-->
 <!--</div>-->
 <!--<p id="strength-text">Strength: </p>-->
-<ul id="validation-list">
-  <li id="length-check">At least 8 characters long</li>
-  <li id="uppercase-check">Contains an uppercase letter</li>
-  <li id="lowercase-check">Contains a lowercase letter</li>
-  <li id="number-symbol-check">Contains a number or symbol</li>
-</ul>
+
 
 <script>
+  // Helper function to update validation styles
+  function styleRequirements(element, isValid) {
+    if (isValid) {
+      element.style.color = 'green';
+      element.classList.remove('invalid');
+    }
+    else {
+      element.style.color = 'red';
+      element.classList.add('invalid');
+    }
+  }
+
   <!--  Only allow this page to be seen from formsort flow-->
   // if (window.top !== window.self) {
   //   const allowedDomains = [
@@ -162,11 +176,14 @@
   //   window.location.href = 'https://wearise.com';
   // }
 
-  const pwdInput = document.querySelector('#iframe-pwd');
-  const strengthMeter = document.getElementById('strength-bar');
-  const strengthText = document.getElementById('strength-text');
+  // Help formsort size iframe correctly
+  window.addEventListener('load', () => {
+    const width = document.body.offsetWidth;
+    const height = document.body.offsetHeight;
+    formsort.setQuestionSize(width, height);
+  })
 
-  const validationList = document.getElementById('validation-list');
+  // Show or Hide password
   const togglePasswordButton = document.getElementById('togglePassword');
   togglePasswordButton.addEventListener('click', () => {
     const type = pwdInput.type === 'password' ? 'text' : 'password';
@@ -174,25 +191,42 @@
     togglePasswordButton.textContent = type === 'password' ? 'Show' : 'Hide';
   });
 
+  const pwdInput = document.querySelector('#iframe-pwd');
+  const strengthMeter = document.getElementById('strength-bar');
+  const strengthText = document.getElementById('strength-text');
+
+  const validationList = document.getElementById('validation-list');
+
   // Validation list items
   const lengthCheck = document.getElementById('length-check');
   const uppercaseCheck = document.getElementById('uppercase-check');
   const lowercaseCheck = document.getElementById('lowercase-check');
   const numberSymbolCheck = document.getElementById('number-symbol-check');
 
-  window.addEventListener('load', () => {
-    const width = document.body.offsetWidth;
-    const height = document.body.offsetHeight;
-    formsort.setQuestionSize(width, height);
-  })
+
 
   let isPwdValid = false;
 
   // Password strength meter using zxcvbn
   pwdInput.addEventListener('input', function () {
     const passwordValue = pwdInput.value;
-    const result = zxcvbn(passwordValue);
-    updateStrengthMeter(result.score);
+
+    // Validation rules
+    const lengthValid = passwordValue.length >= 8;
+    const uppercaseValid = /[A-Z]/.test(passwordValue);
+    const lowercaseValid = /[a-z]/.test(passwordValue);
+    const numberSymbolValid = /[\d\W]/.test(passwordValue); // Matches any digit or non-word character
+
+    // Update validation messages
+    styleRequirements(lengthCheck, lengthValid);
+    styleRequirements(uppercaseCheck, uppercaseValid);
+    styleRequirements(lowercaseCheck, lowercaseValid);
+    styleRequirements(numberSymbolCheck, numberSymbolValid);
+
+
+
+    // const result = zxcvbn(passwordValue);
+    // updateStrengthMeter(result.score);
 
 
     // // Map the score to a percentage for the strength bar
@@ -230,24 +264,14 @@
     //
     // strengthText.textContent = `Strength: ${strengthLabel}`;
 
-    // Validation rules
-    const lengthValid = passwordValue.length >= 8;
-    const uppercaseValid = /[A-Z]/.test(passwordValue);
-    const lowercaseValid = /[a-z]/.test(passwordValue);
-    const numberSymbolValid = /[\d\W]/.test(passwordValue); // Matches any digit or non-word character
 
-    // Update validation messages
-    updateValidation(lengthCheck, lengthValid);
-    updateValidation(uppercaseCheck, uppercaseValid);
-    updateValidation(lowercaseCheck, lowercaseValid);
-    updateValidation(numberSymbolCheck, numberSymbolValid);
 
     console.log("isPwdValid", isPwdValid)
 
     // If password is valid and the score is 3 or 4, set the answer value
-    if (isPwdValid && typeof formsort !== 'undefined') {
-      formsort.setAnswerValue(passwordValue);
-    }
+    // if (isPwdValid && typeof formsort !== 'undefined') {
+    //   formsort.setAnswerValue(passwordValue);
+    // }
   });
   //
   // // Ensure that the library is loaded before using it
@@ -277,17 +301,7 @@
     strengthLabel.textContent = strengthText[score];
   }
 
-  // Helper function to update validation styles
-  function updateValidation(element, isValid) {
-    if (isValid) {
-      element.style.color = 'green';
-      element.classList.remove('invalid');
-    }
-    else {
-      element.style.color = 'red';
-      element.classList.add('invalid');
-    }
-  }
+
 </script>
 </body>
 </html>
