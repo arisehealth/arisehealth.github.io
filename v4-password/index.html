@@ -26,12 +26,17 @@
       background-color: #e0e0e0;
       border-radius: 2px;
       margin: 8px 0 16px;
-      overflow: hidden;
+      /*overflow: hidden;*/
     }
 
     .password-container .password-strength div {
-      height: 100%;
-      transition: width 0.3s;
+      /*height: 100%;*/
+      /*transition: width 0.3s;*/
+      flex: 1; /* Make each segment take equal space */
+      margin-right: 4px; /* Space between segments */
+      background-color: #d1d5db; /* Default gray color */
+      border-radius: 4px; /* Rounded corners */
+      transition: background-color 0.3s; /* Smooth transition for color change */
     }
 
     .password-strength div.strength-1 {
