@@ -103,6 +103,8 @@
       "https://onboarding.wearise.com/"
     ];
 
+    console.log(document.referrer)
+
     const isAllowed = allowedDomains.some(domain => document.referrer.startsWith(domain));
 
     // Page is inside an iframe
@@ -183,27 +185,17 @@
    * password strength
    */
   pwdInput.addEventListener('input', function () {
-    const passwordValue = pwdInput.value;
-
     // Password strength meter using zxcvbn
-    const result = zxcvbn(passwordValue);
+    const result = zxcvbn(pwdInput.value);
 
     const modifiedScore = mapScoreToCustomRange(result["score"])
     updateStrengthMeter(modifiedScore);
 
     /**
      * If the library is defined, send values to formsort:
-     *
-     * - Only send scores 3 or 4 (good or strong)
-     * - If score is low, remove value (which will remove Continue button)
      */
     if (typeof formsort !== 'undefined') {
-      // if (result["score"] > 2) {
-      formsort.setAnswerValue(passwordValue);
-      // }
-      // if (result["score"] < 3) {
-      //   formsort.setAnswerValue(null);
-      // }
+      formsort.setAnswerValue(pwdInput.value);
     }
   });
 
