@@ -101,6 +101,7 @@
   <div class="strength-label" id="strength-label">Password strength</div>
 
   <ul id="validation-list">
+    <li id="too-simple">It is too simple</li>
     <li id="length-check">At least 8 characters long</li>
     <li id="uppercase-check">Contains an uppercase letter</li>
     <li id="lowercase-check">Contains a lowercase letter</li>
@@ -213,6 +214,7 @@
   });
 
   // Validation list items
+  const tooSimple = document.getElementById('too-simple');
   const lengthCheck = document.getElementById('length-check');
   const uppercaseCheck = document.getElementById('uppercase-check');
   const lowercaseCheck = document.getElementById('lowercase-check');
@@ -253,9 +255,11 @@
     if (typeof formsort !== 'undefined') {
       if (result["score"] > 2) {
         formsort.setAnswerValue(passwordValue);
+        styleRequirements(tooSimple, true);
       }
       if (result["score"] < 3) {
         formsort.setAnswerValue(null);
+        styleRequirements(tooSimple, false);
       }
     }
   });
