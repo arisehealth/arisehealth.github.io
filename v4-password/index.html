@@ -16,10 +16,6 @@
       margin: 0;
     }
 
-    #validation-list li {
-      font-size: 14px;
-    }
-
     #password-container {
       width: 100%;
     }
@@ -63,7 +59,6 @@
       color: #555;
       margin-bottom: 8px;
       margin-top: 8px;
-      text-align: right;
     }
 
     #password-container .toggle-btn {
@@ -95,18 +90,9 @@
     <div></div>
     <div></div>
     <div></div>
-    <div></div>
-    <div></div>
   </div>
   <div class="strength-label" id="strength-label">Password strength</div>
 
-  <ul id="validation-list">
-    <li id="too-simple">It is too simple and easy to guess</li>
-    <li id="length-check">At least 8 characters long</li>
-    <li id="uppercase-check">Contains an uppercase letter</li>
-    <li id="lowercase-check">Contains a lowercase letter</li>
-    <li id="number-symbol-check">Contains a number or symbol</li>
-  </ul>
 </div>
 
 <script>
@@ -114,8 +100,7 @@
   if (window.top !== window.self) {
     const allowedDomains = [
       "https://www.wearise.com/",
-      "https://onboarding.wearise.com/",
-      "https://studio.formsort.com/"
+      "https://onboarding.wearise.com/"
     ];
 
     const isAllowed = allowedDomains.some(domain => document.referrer.startsWith(domain));
@@ -132,18 +117,21 @@
   }
 
   /**
-   * Helper function to update validation styles
-   * @param element
-   * @param isValid
+   * Converts zxcvbn to 0, 1, 2
+   *
+   * @param {number} score zxcvbn
+   *
+   * @return {number} Our score
    */
-  function styleRequirements(element, isValid) {
-    if (isValid) {
-      element.style.color = 'green';
-      element.classList.remove('invalid');
+  function mapScoreToCustomRange(score) {
+    if (score === 0) {
+      return 0;
     }
-    else {
-      element.style.color = 'red';
-      element.classList.add('invalid');
+    else if (score === 1 || score === 2) {
+      return 1;
+    }
+    else if (score === 3 || score === 4) {
+      return 2;
     }
   }
 
@@ -154,44 +142,18 @@
    */
   function updateStrengthMeter(score) {
     const strengthBars = document.getElementById('password-strength').querySelectorAll('div');
-
-    // Reset all bars to default color and width
-    strengthBars.forEach((bar) => {
-      bar.style.backgroundColor = '#e0e0e0';
-      bar.style.width = '20%'; // Full width
-    });
-
-    // Update bars based on the score
-    for (let i = 0; i <= score; i++) {
-      switch (score) {
-        case 0:
-          strengthBars[i].style.backgroundColor = '#ff4d4d'; // Very Weak
-          break;
-        case 1:
-          strengthBars[i].style.backgroundColor = '#ffcc00'; // Weak
-          break;
-        case 2:
-          strengthBars[i].style.backgroundColor = '#ffdb58'; // Fair
-          break;
-        case 3:
-          strengthBars[i].style.backgroundColor = '#66cc66'; // Good
-          break;
-        case 4:
-          strengthBars[i].style.backgroundColor = '#33cc33'; // Strong
-          break;
-      }
-    }
-
+    const colors = ['#ff4d4d', '#ffcc00', '#33cc33'];
     const strengthText = [
-      'Very weak',
-      'Weak',
-      'Fair',
-      'Good',
-      'Strong'
+      'Needs to be stronger —try a mix of letters, numbers, and symbols.',
+      'Almost there!',
+      'You’re good to go!'
     ];
 
-    const strengthLabel = document.getElementById('strength-label');
-    strengthLabel.textContent = strengthText[score];
+    strengthBars.forEach((bar, index) => {
+      bar.style.backgroundColor = index <= score ? colors[score] : '#d1d5db';
+    });
+
+    document.getElementById('strength-label').textContent = strengthText[score];
   }
 
   /**
@@ -207,44 +169,27 @@
    * Show or Hide password
    */
   const togglePasswordButton = document.getElementById('togglePassword');
+  const pwdInput = document.querySelector('#iframe-pwd');
+
   togglePasswordButton.addEventListener('click', () => {
     const type = pwdInput.type === 'password' ? 'text' : 'password';
     pwdInput.type = type;
     togglePasswordButton.textContent = type === 'password' ? 'Show' : 'Hide';
   });
 
-  // Validation list items
-  const tooSimple = document.getElementById('too-simple');
-  const lengthCheck = document.getElementById('length-check');
-  const uppercaseCheck = document.getElementById('uppercase-check');
-  const lowercaseCheck = document.getElementById('lowercase-check');
-  const numberSymbolCheck = document.getElementById('number-symbol-check');
-
   /**
    * When the value of password changes (keystroke, paste, or any other
    * modification to the input's value) validate password rules and
    * password strength
    */
-  const pwdInput = document.querySelector('#iframe-pwd');
   pwdInput.addEventListener('input', function () {
     const passwordValue = pwdInput.value;
 
-    // Validation rules
-    const lengthValid = passwordValue.length >= 8;
-    const uppercaseValid = /[A-Z]/.test(passwordValue);
-    const lowercaseValid = /[a-z]/.test(passwordValue);
-    // Matches any digit or non-word character
-    const numberSymbolValid = /[\d\W]/.test(passwordValue);
-
-    // Style text following validation rules
-    styleRequirements(lengthCheck, lengthValid);
-    styleRequirements(uppercaseCheck, uppercaseValid);
-    styleRequirements(lowercaseCheck, lowercaseValid);
-    styleRequirements(numberSymbolCheck, numberSymbolValid);
-
     // Password strength meter using zxcvbn
     const result = zxcvbn(passwordValue);
-    updateStrengthMeter(result["score"]);
+
+    const modifiedScore = mapScoreToCustomRange(result["score"])
+    updateStrengthMeter(modifiedScore);
 
     /**
      * If the library is defined, send values to formsort:
@@ -253,14 +198,12 @@
      * - If score is low, remove value (which will remove Continue button)
      */
     if (typeof formsort !== 'undefined') {
-      if (result["score"] > 2) {
-        formsort.setAnswerValue(passwordValue);
-        styleRequirements(tooSimple, true);
-      }
-      if (result["score"] < 3) {
-        formsort.setAnswerValue(null);
-        styleRequirements(tooSimple, false);
-      }
+      // if (result["score"] > 2) {
+      formsort.setAnswerValue(passwordValue);
+      // }
+      // if (result["score"] < 3) {
+      //   formsort.setAnswerValue(null);
+      // }
     }
   });
 
