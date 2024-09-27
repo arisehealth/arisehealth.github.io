@@ -8,6 +8,7 @@
     .timeline {
       display: flex;
       justify-content: space-between;
+      max-width: 500px;
       position: relative;
     }
 
@@ -57,5 +58,23 @@
     <div class="description">We take care of the rest</div>
   </div>
 </div>
+
+<script>
+  // Function to get URL parameters
+  function getUrlParameter(name) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
+  }
+
+  // Get the color parameter from the URL
+  const activePoint = getUrlParameter('active');
+
+  // Change the point background color if the parameter is set to "purple"
+  if (activePoint === 'purple') {
+    document.querySelectorAll('.point').forEach(point => {
+      point.style.backgroundColor = 'purple';
+    });
+  }
+</script>
 </body>
 </html>
