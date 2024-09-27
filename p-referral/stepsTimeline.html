@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Horizontal Timeline</title>
+  <style>
+    .timeline {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .timeline-point {
+      text-align: center;
+      position: relative;
+    }
+
+    .point {
+      align-items: center;
+      background-color: #3A0EED;
+      border-radius: 50%;
+      color: white;
+      display: flex;
+      font-weight: bold;
+      height: 30px;
+      justify-content: center;
+      margin: 0 auto;
+      position: relative;
+      width: 30px;
+      z-index: 2;
+    }
+
+    .description {
+      padding-top: 10px;
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+</head>
+
+<body>
+<div class="timeline">
+  <div class="timeline-point">
+    <div class="point">1</div>
+    <div class="description">Share your information</div>
+  </div>
+  <div class="timeline-point">
+    <div class="point">2</div>
+    <div class="description">Tell us a bit about your patient</div>
+  </div>
+  <div class="timeline-point">
+    <div class="point">3</div>
+    <div class="description">We take care of the rest</div>
+  </div>
+</div>
+</body>
+</html>
