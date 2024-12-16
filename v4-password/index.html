@@ -101,8 +101,7 @@
     const allowedDomains = [
       "https://www.wearise.com/",
       "https://onboarding.wearise.com/",
-      "https://xe3ta25ucn.formsort.app/",
-      "https://arisehealth.github.io"
+      "https://xe3ta25ucn.formsort.app/"
     ];
 
     const isAllowed = allowedDomains.some(domain => document.referrer.startsWith(domain));
@@ -199,10 +198,11 @@
     }
     else {
       // Password strength meter using zxcvbn
-      pwdScore = zxcvbn(pwdInput.value);
+      const score = zxcvbn(pwdInput.value);
+      pwdScore = score["score"];
     }
 
-    const modifiedScore = mapScoreToCustomRange(pwdScore["score"])
+    const modifiedScore = mapScoreToCustomRange(pwdScore)
     updateStrengthMeter(modifiedScore);
 
     /**
