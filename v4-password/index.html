@@ -101,7 +101,8 @@
     const allowedDomains = [
       "https://www.wearise.com/",
       "https://onboarding.wearise.com/",
-      "https://xe3ta25ucn.formsort.app/"
+      "https://xe3ta25ucn.formsort.app/",
+      "https://arisehealth.github.io"
     ];
 
     const isAllowed = allowedDomains.some(domain => document.referrer.startsWith(domain));
@@ -184,10 +185,24 @@
    * password strength
    */
   pwdInput.addEventListener('input', function () {
-    // Password strength meter using zxcvbn
-    const result = zxcvbn(pwdInput.value);
+    let pwdScore;
 
-    const modifiedScore = mapScoreToCustomRange(result["score"])
+    const containsInt = /\d/.test(pwdInput.value);
+    const containsSymbol = /\W/.test(pwdInput.value);
+    const containsLowercase = /[a-z]/.test(pwdInput.value)
+    const containsUppercase = /[A-Z]/.test(pwdInput.value)
+    const isLongEnough = pwdInput.value.length > 7;
+
+    // If the password fails any check,
+    if (!containsInt || !containsSymbol || !containsLowercase || !containsUppercase || !isLongEnough) {
+      pwdScore = 0;
+    }
+    else {
+      // Password strength meter using zxcvbn
+      pwdScore = zxcvbn(pwdInput.value);
+    }
+
+    const modifiedScore = mapScoreToCustomRange(pwdScore["score"])
     updateStrengthMeter(modifiedScore);
 
     /**
