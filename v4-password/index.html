@@ -184,10 +184,25 @@
    * password strength
    */
   pwdInput.addEventListener('input', function () {
-    // Password strength meter using zxcvbn
-    const result = zxcvbn(pwdInput.value);
+    let pwdScore;
 
-    const modifiedScore = mapScoreToCustomRange(result["score"])
+    const containsInt = /\d/.test(pwdInput.value);
+    const containsSymbol = /\W/.test(pwdInput.value);
+    const containsLowercase = /[a-z]/.test(pwdInput.value)
+    const containsUppercase = /[A-Z]/.test(pwdInput.value)
+    const isLongEnough = pwdInput.value.length > 7;
+
+    // If the password fails any check,
+    if (!containsInt || !containsSymbol || !containsLowercase || !containsUppercase || !isLongEnough) {
+      pwdScore = 0;
+    }
+    else {
+      // Password strength meter using zxcvbn
+      const score = zxcvbn(pwdInput.value);
+      pwdScore = score["score"];
+    }
+
+    const modifiedScore = mapScoreToCustomRange(pwdScore)
     updateStrengthMeter(modifiedScore);
 
     /**
