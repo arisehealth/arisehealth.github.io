@@ -209,7 +209,9 @@
      * If the library is defined, send values to formsort:
      */
     if (typeof formsort !== 'undefined') {
-      formsort.setAnswerValue(pwdInput.value);
+      if (modifiedScore > 1) {
+        formsort.setAnswerValue(pwdInput.value);
+      }
     }
   });
 
