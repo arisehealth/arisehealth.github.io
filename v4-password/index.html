@@ -205,11 +205,12 @@
     const modifiedScore = mapScoreToCustomRange(pwdScore)
     updateStrengthMeter(modifiedScore);
 
+    console.log(modifiedScore)
     /**
      * If the library is defined, send values to formsort:
      */
+    if (modifiedScore > 1) {
     if (typeof formsort !== 'undefined') {
-      if (modifiedScore > 1) {
         formsort.setAnswerValue(pwdInput.value);
       }
     }
